@@ -1,3 +1,4 @@
+using JobAssistant.Application.Abstractions;
 using JobAssistant.Application.Services;
 using JobAssistant.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace JobAssistant.API.Controllers;
 
 [Route("workflows")]
-public class ApplicationWorkflowsController(ApplicationWorkflow workflow) : Controller
+public class ApplicationWorkflowsController(IApplicationJobService applicationJobService) : Controller
 {
     [HttpPost("job-application/run")]
     public async Task<IActionResult> Submit(
@@ -17,7 +18,8 @@ public class ApplicationWorkflowsController(ApplicationWorkflow workflow) : Cont
             return BadRequest();
         }
         
-        var response = await workflow.RunAsync(jobSubmission, cancellationToken);
-        return Ok(response);
+        var referenceId = await applicationJobService.CreateJobAsync(jobSubmission, cancellationToken);
+        
+        return Accepted(referenceId);
     } 
 }

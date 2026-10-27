@@ -2,6 +2,7 @@ using JobAssistant.Application.Abstractions;
 using JobAssistant.Infrastructure.Configurations;
 using JobAssistant.Infrastructure.Services;
 using JobAssistant.Infrastructure.Stores;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +24,12 @@ public static class DependencyInjection
             return new OllamaApiClient(new Uri(options.BaseUrl), options.Model);
         });
         services.AddScoped<IStructuredLlmClient, AgentFrameworkStructuredLlmClient>();
-        services.AddScoped<IJobRunStore, JobRunStore>();
         services.AddScoped<IDocxGenerator, OpenXmlDocxGenerator>();
+        services.AddScoped<IApplicationJobStore, ApplicationJobStore>();
+        services.AddSingleton<IApplicationJobQueue, ApplicationJobQueue>();
+
+        services.AddDbContext<ApplicationDbContext>(options => 
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         
         return services;
     }

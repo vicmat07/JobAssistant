@@ -1,0 +1,38 @@
+﻿services:
+  jobassistant.api:
+    image: jobassistant.api
+    build:
+      context: .
+      dockerfile: src/JobAssistant.API/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=JobAssistantDb;User Id=sa;Password=${SA_PASSWORD};Encrypt=True;TrustServerCertificate=True"
+      Ollama__BaseUrl: "http://host.docker.internal:11434"
+    ports:
+      - "8080:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: [ "CMD-SHELL", "bash -c '</dev/tcp/localhost/1433'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+      
+volumes:
+  sqlserver_data:
+
+

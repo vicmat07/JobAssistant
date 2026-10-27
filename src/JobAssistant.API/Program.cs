@@ -1,3 +1,4 @@
+using JobAssistant.API;
 using JobAssistant.Application;
 using JobAssistant.Infrastructure;
 
@@ -9,6 +10,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHostedService<ApplicationJobWorker>();
 
 var app = builder.Build();
 

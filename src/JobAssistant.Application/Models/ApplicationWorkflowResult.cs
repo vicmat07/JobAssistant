@@ -9,6 +9,4 @@ public record ApplicationWorkflowResult(
     JobRequirement JobRequirements,
     MatchAssessment MatchAssessment,
     ApplicationDraft Draft,
-    ValidationReport Validation,
-    string ResumeDocxPath,
-    string CoverLetterDocxPath);
+    ValidationReport Validation);
