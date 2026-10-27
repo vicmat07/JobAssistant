@@ -1,5 +1,4 @@
 using JobAssistant.Application.Abstractions;
-using JobAssistant.Application.Services;
 using JobAssistant.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,8 +22,10 @@ public class ApplicationWorkflowsController(IApplicationJobService applicationJo
         return Accepted(new { referenceId });
     }
 
-    [HttpGet("{referenceId}")]
-    public async Task<IActionResult> Get(Guid referenceId, CancellationToken cancellationToken)
+    [HttpGet("{referenceId:guid}")]
+    public async Task<IActionResult> Get(
+        Guid referenceId, 
+        CancellationToken cancellationToken)
     {
         var jobApplication = await applicationJobService.GetJobAsync(referenceId, cancellationToken);
         

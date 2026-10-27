@@ -7,6 +7,8 @@ internal class ApplicationWriterAgent(IStructuredLlmClient llmClient) : IAgent<W
 {
     public async Task<ApplicationDraft> ExecuteAsync(WriterInput input, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(input);
+        
         return await llmClient.ExecuteAsync<ApplicationDraft>(
             """
             You are the Application Writer Agent. Tailor a resume and cover letter to this job using only

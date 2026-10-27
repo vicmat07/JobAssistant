@@ -7,6 +7,8 @@ internal class QualityReviewAgent(IStructuredLlmClient llmClient) : IAgent<Revie
 {
     public async Task<ValidationReport> ExecuteAsync(ReviewInput input, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(input);
+        
         return await llmClient.ExecuteAsync<ValidationReport>(
             """
             You are the Quality and Fact-Checking Agent. Audit every resume and cover-letter claim against

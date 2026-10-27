@@ -7,6 +7,8 @@ internal class CandidateMatchingAgent(IStructuredLlmClient llmClient) : IAgent<M
 {
     public async Task<MatchAssessment> ExecuteAsync(MatchingInput input, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(input);
+        
         return await llmClient.ExecuteAsync<MatchAssessment>(
             """
             You are the Candidate Matching Agent. Compare requirements only to the supplied candidate profile.

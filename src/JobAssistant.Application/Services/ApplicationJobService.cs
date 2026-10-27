@@ -10,6 +10,8 @@ internal class ApplicationJobService(
 {
     public async Task<Guid> CreateJobAsync(JobSubmission jobSubmission, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(jobSubmission);
+        
         var applicationJob = new ApplicationJob
         {
             Id = Guid.NewGuid(),
