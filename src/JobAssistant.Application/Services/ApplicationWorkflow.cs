@@ -9,8 +9,7 @@ public class ApplicationWorkflow(
     IAgent<JobSubmission, JobRequirement> jobAnalysis,
     IAgent<MatchingInput, MatchAssessment> matching,
     IAgent<WriterInput, ApplicationDraft> writer,
-    IAgent<ReviewInput, ValidationReport> reviewer,
-    IDocxGenerator docx)
+    IAgent<ReviewInput, ValidationReport> reviewer)
 {
     public async Task<ApplicationWorkflowResult> RunAsync(JobSubmission submission, CancellationToken ct)
     {

@@ -20,6 +20,14 @@ public class ApplicationWorkflowsController(IApplicationJobService applicationJo
         
         var referenceId = await applicationJobService.CreateJobAsync(jobSubmission, cancellationToken);
         
-        return Accepted(referenceId);
-    } 
+        return Accepted(new { referenceId });
+    }
+
+    [HttpGet("{referenceId}")]
+    public async Task<IActionResult> Get(Guid referenceId, CancellationToken cancellationToken)
+    {
+        var jobApplication = await applicationJobService.GetJobAsync(referenceId, cancellationToken);
+        
+        return Ok(jobApplication);
+    }
 }

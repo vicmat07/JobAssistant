@@ -21,4 +21,9 @@ internal class ApplicationJobService(
         await queue.EnqueueAsync(applicationJob.Id, cancellationToken);
         return applicationJob.Id;
     }
+
+    public async Task<ApplicationJob> GetJobAsync(Guid jobId, CancellationToken cancellationToken)
+    {
+        return await store.GetByIdAsync(jobId, cancellationToken);
+    }
 }
