@@ -18,6 +18,8 @@ internal class ApplicationJobWorker(
                 using var logScope = logger.BeginScope("Starting processing: {ReferenceId}", jobId);
                 await ProcessJobAsync(jobId, stoppingToken);
                 logger.LogInformation("Job {JobId} processed", jobId);
+                
+                await Task.Delay(TimeSpan.FromSeconds(3), stoppingToken);
             }
         }
     }
