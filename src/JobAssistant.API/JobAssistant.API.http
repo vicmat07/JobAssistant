@@ -11,7 +11,7 @@ Content-Type: application/json
       {
         "employer": "SuperCrypto",
         "title": ".NET Fullstack Engineer",
-        "fromDate": "2019-01-01",
+        "fromDate": "2019-01-01T18:49:00Z",
         "description": "Worked as a fullstack .NET software engineer in EVM based analytics application",
         "technologies": [
           ".NET",
@@ -22,12 +22,14 @@ Content-Type: application/json
       }
     ],
     "languages": [
-      "English",
-      "Spanish"
+      {
+        "language": "English",
+        "fluency": "fluent"
+      }
     ],
     "skills": [
-      ".NET",
-      "Azure"
+      "Azure",
+      ".NET"
     ]
 }
 

@@ -15,7 +15,7 @@ public class CandidateProfilesController(ICandidateProfileService profileService
     {
         var result = await profileService.CreateProfileAsync(request.ToCandidateProfile(), cancellationToken);
         
-        return CreatedAtAction(nameof(GetProfile), new { profileId = result });
+        return CreatedAtAction(actionName: nameof(GetProfile), routeValues: new { profileId = result }, value: result);
     }
 
     [HttpGet("{profileId:guid}")]
