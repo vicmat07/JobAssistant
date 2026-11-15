@@ -1,4 +1,3 @@
-using System.Text.Json;
 using JobAssistant.Application.Abstractions;
 using JobAssistant.Application.Models;
 using JobAssistant.Domain.Models;

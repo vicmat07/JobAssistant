@@ -14,7 +14,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddHostedService<ApplicationJobWorker>();
+builder.Services.AddHostedService<ApplicationJobConsumer>();
 
 var app = builder.Build();
 

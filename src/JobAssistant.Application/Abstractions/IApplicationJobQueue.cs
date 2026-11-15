@@ -1,5 +1,3 @@
-using JobAssistant.Domain.Models;
-
 namespace JobAssistant.Application.Abstractions;
 
 public interface IApplicationJobQueue

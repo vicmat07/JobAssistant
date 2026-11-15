@@ -16,6 +16,7 @@ public static class DependencyInjection
             .AddScoped<IAgent<ReviewInput, ValidationReport>, QualityReviewAgent>()
             .AddScoped<IAgent<MatchingInput, MatchAssessment>, CandidateMatchingAgent>()
             .AddScoped<ApplicationWorkflow>()
-            .AddScoped<IApplicationJobService, ApplicationJobService>();
+            .AddScoped<IApplicationJobService, ApplicationJobService>()
+            .AddScoped<ICandidateProfileService, CandidateProfileService>();
     }
 }

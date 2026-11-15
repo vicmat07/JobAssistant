@@ -1,23 +1,22 @@
+using JobAssistant.API.Extensions;
+using JobAssistant.API.Models;
 using JobAssistant.Application.Abstractions;
-using JobAssistant.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobAssistant.API.Controllers;
 
-[Route("workflows")]
-public class ApplicationWorkflowsController(IApplicationJobService applicationJobService) : Controller
+[Route("api/job-applications")]
+public class JobApplicationsController(
+    IApplicationJobService applicationJobService,
+    ICandidateProfileService candidateProfileService) : Controller
 {
-    [HttpPost("job-application/run")]
+    [HttpPost]
     public async Task<IActionResult> Submit(
-        [FromBody] JobSubmission jobSubmission, 
+        [FromBody] JobSubmissionRequest request, 
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(jobSubmission.JobDescription))
-        {
-            return BadRequest();
-        }
-        
-        var referenceId = await applicationJobService.CreateJobAsync(jobSubmission, cancellationToken);
+        var profile = await candidateProfileService.GetByIdAsync(request.CandidateProfileId, cancellationToken);
+        var referenceId = await applicationJobService.CreateJobAsync(request.ToModel(profile), cancellationToken);
         
         return Accepted(new { referenceId });
     }

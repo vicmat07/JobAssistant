@@ -1,6 +1,34 @@
-@JobAssistant.API_HostAddress = http://localhost:5227
+@HostAddress = http://localhost:5227
 
-GET {{JobAssistant.API_HostAddress}}/weatherforecast/
+POST {{HostAddress}}/api/profiles
 Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "summary": ".NET Software Engineer with 3 years of experience",
+    "experienceItems": [
+      {
+        "employer": "SuperCrypto",
+        "title": ".NET Fullstack Engineer",
+        "fromDate": "2019-01-01",
+        "description": "Worked as a fullstack .NET software engineer in EVM based analytics application",
+        "technologies": [
+          ".NET",
+          "SQL Server",
+          "Ethereum",
+          "Blockchain"
+        ]
+      }
+    ],
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "skills": [
+      ".NET",
+      "Azure"
+    ]
+}
 
 ###

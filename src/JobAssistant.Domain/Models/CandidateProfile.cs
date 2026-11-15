@@ -1,6 +1,7 @@
 namespace JobAssistant.Domain.Models;
 
 public record CandidateProfile(
+    Guid Id,
     string Name,
     string Summary,
     ICollection<ExperienceItem> ExperienceItems,
