@@ -1,13 +1,14 @@
 using JobAssistant.Application.Abstractions;
 using JobAssistant.Application.Models;
 using JobAssistant.Application.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobAssistant.API;
 
-internal class ApplicationJobWorker(
+internal class ApplicationJobConsumer(
     IServiceScopeFactory scopeFactory,
     IApplicationJobQueue queue,
-    ILogger<ApplicationJobWorker> logger) : BackgroundService
+    ILogger<ApplicationJobConsumer> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -27,11 +28,14 @@ internal class ApplicationJobWorker(
     private async Task ProcessJobAsync(Guid applicationJobId, CancellationToken stoppingToken)
     {
         using var scope = scopeFactory.CreateScope();
-        var store = scope.ServiceProvider.GetRequiredService<IApplicationJobStore>();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var workflow = scope.ServiceProvider.GetRequiredService<ApplicationWorkflow>();
         var docxService = scope.ServiceProvider.GetRequiredService<IDocxGenerator>();
             
-        var applicationJob = await store.GetByIdAsync(applicationJobId, stoppingToken);
+        var applicationJob = await context.ApplicationJobs
+                                 .Include(applicationJob => applicationJob.Submission)
+                                 .FirstOrDefaultAsync(x => x.Id == applicationJobId, stoppingToken) 
+                             ?? throw new KeyNotFoundException($"Job {applicationJobId} could not be found");
         var result = await workflow.RunAsync(applicationJob.Submission, stoppingToken);
             
         await docxService.GenerateResumeAsync(result.Draft, result.RunId, stoppingToken);
@@ -41,6 +45,7 @@ internal class ApplicationJobWorker(
         applicationJob.Status = ApplicationJobStatus.Completed;
         applicationJob.CompletedAt = DateTimeOffset.UtcNow;
 
-        await store.UpdateJobAsync(applicationJob, stoppingToken);
+        context.ApplicationJobs.Update(applicationJob);
+        await context.SaveChangesAsync(stoppingToken);
     }
 }
